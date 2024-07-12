@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  backend:
+    build: .
+    # command: bash -c "cd app && alembic init alembic && alembic upgrade head"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/polls
+    ports:
+      - "8000:8000"
+
+  db:
+      image: postgres
+      volumes:
+        - postgres_data:/var/lib/postgresql/data/
+      expose:
+        - 5432
+      ports:
+        - "5432:5432"
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=polls
+
+volumes:
+      postgres_data: 
